@@ -1,0 +1,165 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Juego API - Game Sessions",
+        "description": "API para registrar y consultar sesiones / leaderboard del juego.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://54.209.107.112",
+            "description": "Servidor de producción"
+        }
+    ],
+    "paths": {
+        "/api/sessions": {
+            "post": {
+                "tags": [
+                    "GameSessions"
+                ],
+                "summary": "Registrar nueva sesión de juego",
+                "description": "Crea un nuevo registro de sesión de juego enviado desde el juego (Unity).",
+                "operationId": "d00b6d493295f4b056ebf30e5182456c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "player_name",
+                                    "kills",
+                                    "rooms"
+                                ],
+                                "properties": {
+                                    "player_name": {
+                                        "type": "string",
+                                        "example": "Omar"
+                                    },
+                                    "kills": {
+                                        "type": "integer",
+                                        "example": 15
+                                    },
+                                    "rooms": {
+                                        "type": "integer",
+                                        "example": 4
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sesión registrada correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "player_name": {
+                                            "type": "string",
+                                            "example": "Omar"
+                                        },
+                                        "kills": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "rooms": {
+                                            "type": "integer",
+                                            "example": 4
+                                        },
+                                        "ended_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2025-11-16T21:35:00"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    }
+                }
+            }
+        },
+        "/api/leaderboard": {
+            "get": {
+                "tags": [
+                    "GameSessions"
+                ],
+                "summary": "Leaderboard de sesiones de juego",
+                "description": "Devuelve, por jugador, sus mejores estadísticas (máximos de kills y rooms) y la última vez que jugó.",
+                "operationId": "a9ddeac1edeb84bd51b972045ef1f052",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Cantidad máxima de jugadores a devolver (1–100).",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 20,
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de jugadores con sus mejores estadísticas.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "player_name": {
+                                                "type": "string",
+                                                "example": "Omar"
+                                            },
+                                            "best_kills": {
+                                                "type": "integer",
+                                                "example": 42
+                                            },
+                                            "best_rooms": {
+                                                "type": "integer",
+                                                "example": 7
+                                            },
+                                            "last_played": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-11-16T21:35:00"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "GameSessions",
+            "description": "GameSessions"
+        }
+    ]
+}
